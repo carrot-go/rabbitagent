@@ -20,7 +20,7 @@ func main() {
 	}
 
 	metricLoop := rabbitagent.NewMetriceLoop(func(ctx context.Context, record *rabbitagent.MetricEntry) {
-		fmt.Println(record.Step)
+		fmt.Println("key:", record.Item, "| value:", record.Step)
 	})
 
 	metricC := make(chan []rabbitagent.MetricEntry, 1000)
@@ -31,4 +31,7 @@ func main() {
 	go rabbitLoop.Loop(ticker.C, metricC)
 
 	<- make(chan struct{})
+
+	ticker.Stop()
+	close(metricC)
 }

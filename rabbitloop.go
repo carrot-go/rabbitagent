@@ -27,10 +27,11 @@ func (r *RabbitLoop) Loop(tick <-chan time.Time, metricC chan<- []MetricEntry) {
 		select {
 		case t := <-tick:
 			ctx := context.TODO()
-			fmt.Printf("rabbitLoop start at %s", t.String())
+			fmt.Printf("rabbitLoop start at %s\n", t.String())
 			go r.c.GetQueues(ctx, mQueueC, mErrorC)
 			break
 		case queues := <-mQueueC:
+			fmt.Println("queues info got")
 			metricC <- r.CollectQueueMetrics(queues)
 			break
 		case err := <-mErrorC:
